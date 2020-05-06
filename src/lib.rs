@@ -14,10 +14,19 @@ pub struct MessageApp {
 // A type can have multiple impl blocks, but there is typically only one
 // main one.
 impl MessageApp {
+    // It's returning a `MessageApp`, but `Self` is the idiomatic way
+    // to write it.  This doesn't take `&self` because it's run on the
+    // type, not an instance of the type.
     pub fn new(port: u16) -> Self {
-        MessageApp { port }
+        MessageApp { port } // works like JS objects: { port: port }
     }
 
+    // `&self` or `self` (including mut versions) are used with dot
+    // syntaxes on _instances_ of the type, using dot syntax. This
+    // takes an immutable reference, so the calling code maintains
+    // ownership. If it used `self`, then ownership would be passed in,
+    // and the function would usually transform the type into something
+    // else (for example with interfaces that use the builder pattern).
     pub fn run(&self) -> std::io::Result<()> {
         println!("starting http server on 127.0.0.1:{}", self.port);
 
